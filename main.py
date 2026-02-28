@@ -1,42 +1,56 @@
 import requests
 import random
+import math
+import datetime
 from dotenv import load_dotenv
 from os import getenv
+import json
 
 load_dotenv()
 
 TMDB_API_KEY = getenv('TMDB_API_KEY')
 DISCORD_WEB_HOOK = getenv('DISCORD_WEB_HOOK')
+TEST_HOOK = getenv('TEST_HOOK')
+
+with open('genres.json') as file:
+    data = json.load(file)
+    genres = data["genres"]
+    
+date = datetime.datetime.now()
+day = date.weekday()
+
+genre = genres[day]
 
 headers = {
     "accept": "application/json",
     "Authorization" : f"Bearer {TMDB_API_KEY}"
 }
 
-url = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=vote_average.desc&vote_average.gte=5&vote_count.gte=1000&with_genres=27&page=1'
+url = f"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=vote_average.desc&vote_average.gte=5&vote_count.gte=1000&with_genres={genre["id"]}&page=1"
 
 
 response = requests.get(url, headers=headers)
 
 json = response.json()
 
-randomPage = random.randrange(1, json['total_pages'])
-print(f"random page: {randomPage}")
-randomEntry = random.randrange(0,19)
-print(f"random entry = {randomEntry}")
+randomEntry = random.randrange(1, json['total_results'])
+pageItem = randomEntry % 19
+page = math.floor(randomEntry / 19) + 1
+print(f"random entry: {randomEntry}\npage: {page}\nitem: {pageItem}")
 
-url = f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=vote_average.desc&vote_average.gte=5&vote_count.gte=1000&with_genres=27&page={randomPage}'
+url = f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=vote_average.desc&vote_average.gte=5&vote_count.gte=1000&with_genres={genre["id"]}&page={page}'
 
 response = requests.get(url, headers=headers)
 
 json = response.json()
-movie = json['results'][randomEntry] if json['results'][randomEntry] else json['results'][0]
+movie = json['results'][pageItem] if json['results'][pageItem] else json['results'][0]
 title = movie['title']
 releaseDate = movie['release_date'].split('-')[0]
 
 postbody = {
-    "content": f"Random Horror Movie of the Week: {title}, Released {releaseDate}.\nhttps://image.tmdb.org/t/p/original{movie['poster_path']}"
+    "content": f"Random {genre["name"]} Movie of the Week: {title}, Released {releaseDate}.\nhttps://image.tmdb.org/t/p/original{movie['poster_path']}"
 }
 
-requests.post(DISCORD_WEB_HOOK, json = postbody)
+requests.post(TEST_HOOK, json = postbody)
 
+ 

@@ -1,0 +1,32 @@
+{
+	"genres": [
+		{
+			"id": "28%7C12",
+			"name": "Action/ Adventure"
+		},
+		{
+			"id": 35,
+			"name": "Comedy"
+		},
+		{
+			"id": 99,
+			"name": "Documentary"
+		},
+		{
+			"id": "18%7C9648",
+			"name": "Drama/ Mystery"
+		},
+		{
+            "id": 10749,
+			"name": "Romance"
+		},
+		{
+            "id": 878,
+			"name": "Science Fiction"
+		},
+        {
+            "id": "27%7C53",
+            "name": "Horror/ Thriller"
+        }
+	]
+}
