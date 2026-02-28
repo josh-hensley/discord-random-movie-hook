@@ -51,6 +51,6 @@ postbody = {
     "content": f"Random {genre["name"]} Movie of the Week: {title}, Released {releaseDate}.\nhttps://image.tmdb.org/t/p/original{movie['poster_path']}"
 }
 
-requests.post(TEST_HOOK, json = postbody)
+requests.post(DISCORD_WEB_HOOK, json = postbody)
 
  
