@@ -46,10 +46,21 @@ json = response.json()
 movie = json['results'][pageItem] if json['results'][pageItem] else json['results'][0]
 title = movie['title']
 releaseDate = movie['release_date'].split('-')[0]
+plot = movie['overview']
+image = f"https://image.tmdb.org/t/p/original{movie['poster_path']}"
 
 postbody = {
-    "content": f"Random {genre["name"]} Movie of the Week: {title}, Released {releaseDate}.\nhttps://image.tmdb.org/t/p/original{movie['poster_path']}"
-}
+    "content" : f"Random {genre["name"]} Movie of the Week:",
+    "embeds" : [
+        {
+            "title" : title,
+            "description" : f"Released {releaseDate}. {plot}",
+            "image" : {
+                "url" : image
+                }
+        }
+    ]
+    }
 
 requests.post(DISCORD_WEB_HOOK, json = postbody)
 
