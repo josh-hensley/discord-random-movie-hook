@@ -34,8 +34,8 @@ response = requests.get(url, headers=headers)
 json = response.json()
 
 randomEntry = random.randrange(1, json['total_results'])
-pageItem = randomEntry % 19
-page = math.floor(randomEntry / 19) + 1
+pageItem = randomEntry % 20
+page = math.floor(randomEntry / 20) + 1
 print(f"random entry: {randomEntry}\npage: {page}\nitem: {pageItem}")
 
 url = f'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=vote_average.desc&vote_average.gte=5&vote_count.gte=1000&with_genres={genre["id"]}&page={page}'
@@ -60,7 +60,7 @@ postbody = {
                 }
         }
     ]
-    }
+}
 
 requests.post(DISCORD_WEB_HOOK, json = postbody)
 
